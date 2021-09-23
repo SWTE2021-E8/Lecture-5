@@ -8,40 +8,46 @@ namespace ECS.UnitTests
 {
     public class Tests
     {
-        FakeTempSensor tempSensor = new FakeTempSensor();
-        fakeHeater heater = new fakeHeater(false);
+        ITempSensor fakeTempSensor;
+        IHeater fakeHeater;
         ECSystem control;
-        
 
         [SetUp]
         public void Setup()
         {
-            control = new ECSystem(23, tempSensor, heater);
+            fakeHeater = Substitute.For<Heater>();
+            fakeTempSensor = Substitute.For<ITempSensor>();
+            control = new ECSystem(23, fakeTempSensor, fakeHeater);
         }
 
         //Heater Tests
         [Test]
         public void ESC_overthreshold()
         {
-            tempSensor.SetTemp(24);
+            fakeTempSensor.GetTemp().Returns(24);
+
             control.Regulate();
-            Assert.AreEqual(false,heater.heating);
+            Assert.IsFalse(fakeHeater.IsHeating());
         }
 
         [Test]
         public void ESC_underthreshold()
         {
-            tempSensor.SetTemp(22);
+            var tempSensor = Substitute.For<ITempSensor>();
+            tempSensor.GetTemp().Returns(23);
+
             control.Regulate();
-            Assert.AreEqual(true,heater.heating);
+            Assert.IsTrue(fakeHeater.IsHeating());
         }
 
         [Test]
         public void ESC_Atthreshold()
         {
-            tempSensor.SetTemp(23);
+            var tempSensor = Substitute.For<ITempSensor>();
+            tempSensor.GetTemp().Returns(23);
+
             control.Regulate();
-            Assert.AreEqual(false,heater.heating);
+            Assert.IsTrue(fakeHeater.IsHeating());
         }
 
 
