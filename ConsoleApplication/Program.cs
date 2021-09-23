@@ -1,6 +1,7 @@
 ﻿using System;
+using ECS.Redesign;
 
-namespace ECS.Redesign
+namespace ConsoleApplication
 {
     class Program
     {
