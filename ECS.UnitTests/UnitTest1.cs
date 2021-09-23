@@ -2,6 +2,7 @@ using NUnit.Framework;
 using ECS.Redesign;
 using Microsoft.VisualBasic;
 using NUnit.Framework.Constraints;
+using NSubstitute;
 
 namespace ECS.UnitTests
 {
@@ -9,11 +10,13 @@ namespace ECS.UnitTests
     {
         FakeTempSensor tempSensor = new FakeTempSensor();
         fakeHeater heater = new fakeHeater(false);
-        private Redesign.ECS control;
+        ECSystem control;
+        
+
         [SetUp]
         public void Setup()
         {
-            control = new Redesign.ECS(23, tempSensor, heater);
+            control = new ECSystem(23, tempSensor, heater);
         }
 
         //Heater Tests
